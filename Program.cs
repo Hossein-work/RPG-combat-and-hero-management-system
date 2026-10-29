@@ -60,35 +60,51 @@ class BaseClass
     }
     internal async Task Attack(params BaseClass[] Characters)
     {
-        while (true)
+        while (isEleminated == false)
         {
-            for (int i = 0; i < attackCount; i++)
+            if (superAttackCheck)
+            {
+                for (int i = 0; i < attackCount; i++)
+                {
+                    await Task.Delay(AttackSpeed);
+
+                    Characters[0].ReceiveDamage(AttackDamage);
+
+                    Console.WriteLine(Name);
+                }
+                if (nowEnergy >= amountOfEnergyConsumed)
+                    await SuperAttack(Characters);
+            }
+            else
             {
                 await Task.Delay(AttackSpeed);
 
                 Characters[0].ReceiveDamage(AttackDamage);
 
-                Console.WriteLine("attack");
+                Console.WriteLine(Name);
             }
-            if (superAttackCheck && nowEnergy >= amountOfEnergyConsumed)
-                await SuperAttack(Characters);
         }
     }
     private protected virtual async Task SuperAttack(BaseClass[] Character)
     {
+
         await Task.Delay(superAttackSpeed);
         foreach (var item in Character)
         {
             item.ReceiveDamage(AttackDamage);
         }
         nowEnergy -= amountOfEnergyConsumed;
+
     }
 
 
     internal void ReceiveDamage(int damageValue)
     {
         if (nowHeath <= 0)
+        {
             isEleminated = true;
+            nowHeath = 0;
+        }
         else
             nowHeath -= damageValue;
     }
@@ -102,6 +118,39 @@ class Heroes : BaseClass
 class Enemies : BaseClass
 {
 
+}
+class Gobline : Enemies
+{
+    public Gobline()
+    {
+        MaxHeath = 80;
+        nowHeath = MaxHeath;
+
+        superAttackCheck = false;
+
+        AttackDamage = 40;
+        AttackSpeed = 500;
+    }
+}
+class Boss : Enemies
+{
+    public Boss()
+    {
+        MaxHeath = 600;
+        nowHeath = MaxHeath;
+
+        superAttackCheck = true;
+        superAttackDamage = 300;
+        superAttackSpeed = 6000;
+        amountOfEnergyConsumed = 50;
+
+        maxEnergy = 150;
+        nowEnergy = maxEnergy;
+
+        attackCount = 6;
+        AttackDamage = 150;
+        AttackSpeed = 4500;
+    }
 }
 class Warrior : Heroes
 {
@@ -135,14 +184,39 @@ class Mage : Heroes
 {
     public Mage()
     {
+        MaxHeath = 150;
+        nowHeath = MaxHeath;
 
+        superAttackCheck = true;
+        superAttackDamage = 300;
+        superAttackSpeed = 5000;
+        amountOfEnergyConsumed = 50;
+
+        maxEnergy = 100;
+        nowEnergy = maxEnergy;
+
+        attackCount = 6;
+        AttackDamage = 80;
+        AttackSpeed = 1500;
     }
 }
 class Archer : Heroes
 {
     public Archer()
     {
-        maxEnergy = 80;
+        MaxHeath = 100;
+        nowHeath = MaxHeath;
+
+        superAttackCheck = true;
+        superAttackDamage = 50;
+        superAttackSpeed = 5000;
+        amountOfEnergyConsumed = 20;
+
+        maxEnergy = 100;
         nowEnergy = maxEnergy;
+
+        attackCount = 4;
+        AttackDamage = 50;
+        AttackSpeed = 1000;
     }
 }
