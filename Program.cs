@@ -1,6 +1,39 @@
-﻿BaseClass a = new Warrior();
-BaseClass b = new Warrior();
-await a.Attack(b);
+﻿BaseClass[][] number = new BaseClass[5][];
+int n = 0;
+foreach (string item in Enum.GetNames(typeof(Name)))
+{
+    Console.WriteLine($"Please enter number of {item}");
+    int input = int.Parse(Console.ReadLine());
+
+    switch (item)
+    {
+        case "Warrior":
+            number[n] = new Warrior[input];
+            break;
+        case "Mage":
+            number[n] = new Mage[input];
+            break;
+        case "Archer":
+            number[n] = new Archer[input];
+            break;
+        case "Goblin":
+            number[n] = new Goblin[input];
+            break;
+        case "Boss":
+            number[n] = new Boss[input];
+            break;
+    }
+    n++;
+}
+
+enum Name
+{
+    Warrior,
+    Mage,
+    Archer,
+    Goblin,
+    Boss
+}
 class BaseClass
 {
     private protected int maxEnergy;
@@ -15,7 +48,7 @@ class BaseClass
     private protected int superAttackSpeed;
     private protected int attackCount;
     private protected int amountOfEnergyConsumed;
-    public readonly string Name;
+    private protected string Name;
 
     public int AttackDamage
     {
@@ -89,10 +122,9 @@ class BaseClass
     {
 
         await Task.Delay(superAttackSpeed);
-        foreach (var item in Character)
-        {
-            item.ReceiveDamage(AttackDamage);
-        }
+
+        Character[0].ReceiveDamage(AttackDamage);
+        Console.WriteLine("Super" + Name);
         nowEnergy -= amountOfEnergyConsumed;
 
     }
@@ -119,10 +151,11 @@ class Enemies : BaseClass
 {
 
 }
-class Gobline : Enemies
+class Goblin : Enemies
 {
-    public Gobline()
+    public Goblin()
     {
+        Name = "Gobline";
         MaxHeath = 80;
         nowHeath = MaxHeath;
 
@@ -136,6 +169,7 @@ class Boss : Enemies
 {
     public Boss()
     {
+        Name = "Boss";
         MaxHeath = 600;
         nowHeath = MaxHeath;
 
@@ -164,6 +198,7 @@ class Warrior : Heroes
     }
     public Warrior()
     {
+        Name = "Warrior";
         MaxHeath = 500;
         nowHeath = MaxHeath;
 
@@ -184,6 +219,7 @@ class Mage : Heroes
 {
     public Mage()
     {
+        Name = "Mage";
         MaxHeath = 150;
         nowHeath = MaxHeath;
 
@@ -204,6 +240,7 @@ class Archer : Heroes
 {
     public Archer()
     {
+        Name = "Archer";
         MaxHeath = 100;
         nowHeath = MaxHeath;
 
@@ -218,5 +255,15 @@ class Archer : Heroes
         attackCount = 4;
         AttackDamage = 50;
         AttackSpeed = 1000;
+    }
+    private protected override async Task SuperAttack(BaseClass[] Character)
+    {
+        await Task.Delay(superAttackSpeed);
+        foreach (BaseClass c in Character)
+        {
+            c.ReceiveDamage(AttackDamage);
+        }
+        Console.WriteLine("Super");
+        nowEnergy -= amountOfEnergyConsumed;
     }
 }
