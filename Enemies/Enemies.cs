@@ -1,0 +1,4 @@
+class Enemies : BaseClass
+{
+
+}
