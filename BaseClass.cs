@@ -115,25 +115,30 @@ class BaseClass
     }
     private async Task AttackController(List<BaseClass> Characters)
     {
+        void Attack()
+        {
+            if (Characters[n].isEleminated == false)
+            {
+                PrintColor(Name+ (n+1), "\u001b[32m");
+                Characters[n].ReceiveDamage(AttackDamage);
+            }
+            else
+            {
+                n++;
+                if (n >= Characters.Count)
+                {
+                    cancellationTokenSource.Cancel();
+                    return;
+                }
+                Attack();
+            }
+        }
         if (isEleminated == false)
         {
             try
             {
                 await Task.Delay(AttackSpeed, cancellationTokenSource.Token);
-                if (Characters[n].isEleminated == false)
-                {
-                    PrintColor(Name, "\u001b[32m");
-                    Characters[n].ReceiveDamage(AttackDamage);
-                }
-                else
-                {
-                    n++;
-                    if (n >= Characters.Count)
-                    {
-                        cancellationTokenSource.Cancel();
-                        return;
-                    }
-                }
+                Attack();
             }
             catch
             {
@@ -149,8 +154,8 @@ class BaseClass
     }
     private protected virtual void SuperAttack(List<BaseClass> Character)
     {
-        Character[0].ReceiveDamage(AttackDamage);
         PrintColor(Name + "superrr", "\u001b[32m");
+        Character[0].ReceiveDamage(AttackDamage);
         nowEnergy -= amountOfEnergyConsumed;
 
     }
