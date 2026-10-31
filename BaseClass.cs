@@ -3,9 +3,9 @@ class BaseClass
     private protected int maxEnergy;
     private protected int nowEnergy;
     private protected bool superAttackCheck;
-    private int maxHeath;
-    private int nowHeath;
-    private int attackDamage;
+    private float maxHeath;
+    private float nowHeath;
+    private float attackDamage;
     private protected int superAttackDamage;
     private bool isEleminated;
     private int attackSpeed;
@@ -13,10 +13,10 @@ class BaseClass
     private protected int attackCount;
     private protected int amountOfEnergyConsumed;
     private string name;
-    internal string Name { get => name; set => name = value; }
+    public string Name { get => name;protected set => name = value; }
     internal CancellationTokenSource cancellationTokenSource;
 
-    public int AttackDamage
+    public float AttackDamage
     {
         get => attackDamage;
         set
@@ -25,7 +25,7 @@ class BaseClass
         }
     }
 
-    public int MaxHeath
+    public float MaxHeath
     {
         get
         {
@@ -42,16 +42,20 @@ class BaseClass
         get => attackSpeed;
         set
         {
-            int n = CheckInput(value);
-            Random r = new Random();
+            if (value > 100)
+            {
+                Random r = new Random();
 
-            attackSpeed = r.Next(n - 100, n + 100);
+                attackSpeed = r.Next(n - 100, n + 100);
+            }
+            else throw new ApplicationException("Cannot be Less than 101");
+            
         }
     }
 
-    internal int NowHeath { get => nowHeath; set => nowHeath = value; }
+    internal float NowHeath { get => nowHeath; set => nowHeath = value; }
 
-    int CheckInput(int value)
+    float CheckInput(float value)
     {
         if (value > 0)
             return value;
@@ -160,7 +164,7 @@ class BaseClass
 
     }
 
-    internal void ReceiveDamage(int damageValue)
+    internal void ReceiveDamage(float damageValue)
     {
         if (isEleminated == false)
         {
