@@ -1,11 +1,28 @@
-class Tools
+static class Tools
 {
     internal static bool IsEndGame = false;
-    internal static Dictionary<int, List<BaseClass>> number = new Dictionary<int, List<BaseClass>>()
+    private static Dictionary<int, List<BaseClass>> number = new Dictionary<int, List<BaseClass>>()
     {
         {0,new List<BaseClass>()  },
         {1,new List<BaseClass>()  },
     };
+    internal static List<BaseClass> GetList(byte key) => number[key]; 
+    internal static void AddToList(int key, BaseClass value)
+    {
+        number[key].Add(value);
+    }
+    private static List<int> potionNumber = new List<int>()
+    {
+        1,1,1
+    };
+    public static IReadOnlyList<int> PotionNumber => potionNumber.AsReadOnly();
+    internal static void UsePotion(Potions type) => potionNumber[(byte)type] -= 1;
+    internal enum Potions
+    {
+        Health,
+        Mana,
+        Weapon
+    }
     internal static void EndGameController()
     {
         Enemys();
