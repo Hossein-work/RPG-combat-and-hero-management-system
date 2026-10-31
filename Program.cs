@@ -6,44 +6,44 @@ foreach (string item in Enum.GetNames(typeof(Name)))
         switch (item)
         {
             case "Warrior":
-                Tools.number[0].AddRange(new Warrior());
+                Tools.AddToList(0,new Warrior());
                 break;
             case "Mage":
-                Tools.number[0].AddRange(new Mage());
+                Tools.AddToList(0,new Mage());
                 break;
             case "Archer":
-                Tools.number[0].AddRange(new Archer());
+                Tools.AddToList(0, new Archer());
                 break;
             case "Goblin":
-                Tools.number[1].Add(new Goblin());
+                Tools.AddToList(1, new Goblin());
                 break;
             case "Boss":
-                Tools.number[1].Add(new Boss());
+                Tools.AddToList(1, new Boss());
                 break;
         }
 }
 await PlayGame();
-foreach (var item in Tools.number[0])
+foreach (var item in Tools.GetList(0))
 {
     Console.WriteLine(item.Name + item.NowHeath);
 }
-foreach (var item in Tools.number[1])
+foreach (var item in Tools.GetList(1))
 {
     Console.WriteLine(item.Name + item.NowHeath);
 }
 async Task PlayGame()
 {
-    Tools.number[(byte)TypeOfCharacter.Heroes].Sort((a, b) => b.MaxHeath.CompareTo(a.MaxHeath));
-    Tools.number[(byte)TypeOfCharacter.Enemies].Sort((a, b) => b.MaxHeath.CompareTo(a.MaxHeath));
+    Tools.GetList((byte)TypeOfCharacter.Heroes).Sort((a, b) => b.MaxHeath.CompareTo(a.MaxHeath));
+    Tools.GetList((byte)TypeOfCharacter.Enemies).Sort((a, b) => b.MaxHeath.CompareTo(a.MaxHeath));
     List<Task> task = new List<Task>();
 
-    foreach (Heroes hero in Tools.number[0])
+    foreach (Heroes hero in Tools.GetList(0))
     {
-        task.Add(hero.Attack(Tools.number[(byte)TypeOfCharacter.Enemies]));
+        task.Add(hero.Attack(Tools.GetList((byte)TypeOfCharacter.Enemies)));
     }
-    foreach (Enemies enemy in Tools.number[1])
+    foreach (Enemies enemy in Tools.GetList(1))
     {
-        task.Add(enemy.Attack(Tools.number[(byte)TypeOfCharacter.Heroes]));
+        task.Add(enemy.Attack(Tools.GetList((byte)TypeOfCharacter.Heroes)));
     }
     await Task.WhenAll(task);
 }
