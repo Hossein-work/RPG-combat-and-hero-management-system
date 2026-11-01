@@ -54,4 +54,8 @@ static class Tools
             EndGame();
         }
     }
+    internal static void PrintColor(string text, string color)
+    {
+        Console.WriteLine($"{color}{text}\u001b[0m");
+    }
 }

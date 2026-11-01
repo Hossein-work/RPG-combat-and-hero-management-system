@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices.Marshalling;
+
 class BaseClass
 {
     private protected int maxEnergy;
@@ -7,13 +9,13 @@ class BaseClass
     private float nowHeath;
     private float attackDamage;
     private protected int superAttackDamage;
-    private bool isEleminated;
+    protected bool isEleminated;
     private int attackSpeed;
     private protected int superAttackSpeed;
     private protected int attackCount;
     private protected int amountOfEnergyConsumed;
     private string name;
-    public string Name { get => name;protected set => name = value; }
+    public string Name { get => name; protected set => name = value; }
     internal CancellationTokenSource cancellationTokenSource;
 
     public float AttackDamage
@@ -46,10 +48,10 @@ class BaseClass
             {
                 Random r = new Random();
 
-                attackSpeed = r.Next(n - 100, n + 100);
+                attackSpeed = r.Next(value - 100, value + 100);
             }
             else throw new ApplicationException("Cannot be Less than 101");
-            
+
         }
     }
 
@@ -119,24 +121,6 @@ class BaseClass
     }
     private async Task AttackController(List<BaseClass> Characters)
     {
-        void Attack()
-        {
-            if (Characters[n].isEleminated == false)
-            {
-                PrintColor(Name+ (n+1), "\u001b[32m");
-                Characters[n].ReceiveDamage(AttackDamage);
-            }
-            else
-            {
-                n++;
-                if (n >= Characters.Count)
-                {
-                    cancellationTokenSource.Cancel();
-                    return;
-                }
-                Attack();
-            }
-        }
         if (isEleminated == false)
         {
             try
@@ -151,33 +135,52 @@ class BaseClass
         }
         else
             return;
+        void Attack()
+        {
+            if (Characters[n].isEleminated == false)
+            {
+                Tools.PrintColor(Name + (n + 1), "\u001b[32m");
+                Characters[n].SendDamage(AttackDamage);
+            }
+            else
+            {
+                n++;
+                if (n >= Characters.Count)
+                {
+                    cancellationTokenSource.Cancel();
+                    return;
+                }
+                Attack();
+            }
+        }
     }
-    protected static void PrintColor(string text, string color)
-    {
-        Console.WriteLine($"{color}{text}\u001b[0m");
-    }
+    
     private protected virtual void SuperAttack(List<BaseClass> Character)
     {
-        PrintColor(Name + "superrr", "\u001b[32m");
-        Character[0].ReceiveDamage(AttackDamage);
+        Tools.PrintColor(Name + "superrr", "\u001b[32m");
+        Character[0].SendDamage(AttackDamage);
         nowEnergy -= amountOfEnergyConsumed;
 
     }
 
-    internal void ReceiveDamage(float damageValue)
+    internal void SendDamage(float damageValue)
     {
         if (isEleminated == false)
         {
             NowHeath -= damageValue;
             if (NowHeath <= 0)
             {
-                isEleminated = true;
-                cancellationTokenSource.Cancel();
-                NowHeath = 0;
-                Tools.EndGameController();
+                ReceiveDamage();
             }
         }
-        PrintColor(Name + NowHeath, "\u001b[31m");
+        Tools.PrintColor(Name + NowHeath, "\u001b[31m");
+    }
+    protected virtual void ReceiveDamage()
+    {
+        isEleminated = true;
+        cancellationTokenSource.Cancel();
+        NowHeath = 0;
+        Tools.EndGameController();
     }
 
 }

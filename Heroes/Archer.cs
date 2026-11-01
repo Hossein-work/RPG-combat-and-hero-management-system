@@ -20,10 +20,10 @@ class Archer : Heroes
     }
     private protected override void SuperAttack(List<BaseClass> Character)
     {
-        PrintColor(Name + "superrr", "\u001b[32m");
+        Tools.PrintColor(Name + "superrr", "\u001b[32m");
         foreach (BaseClass c in Character)
         {
-            c.ReceiveDamage(AttackDamage);
+            c.SendDamage(AttackDamage);
         }
 
         nowEnergy -= amountOfEnergyConsumed;
