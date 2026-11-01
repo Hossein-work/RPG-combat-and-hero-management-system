@@ -19,7 +19,7 @@ class Heroes : BaseClass
         if (Tools.PotionNumber[(byte)Tools.Potions.Mana] > 0 && !usePotion)
         {
             Tools.UsePotion(Tools.Potions.Mana);
-            nowEnergy = maxEnergy;
+            nowMana = maxMana;
             return true;
         }
         else return false;

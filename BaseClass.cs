@@ -2,8 +2,8 @@ using System.Runtime.InteropServices.Marshalling;
 
 class BaseClass
 {
-    private protected int maxEnergy;
-    private protected int nowEnergy;
+    private protected int maxMana;
+    private protected int nowMana;
     private protected bool superAttackCheck;
     private float maxHeath;
     private float nowHeath;
@@ -13,7 +13,7 @@ class BaseClass
     private int attackSpeed;
     private protected int superAttackSpeed;
     private protected int attackCount;
-    private protected int amountOfEnergyConsumed;
+    private protected int amountOfManaConsumed;
     private string name;
     public string Name { get => name; protected set => name = value; }
     internal CancellationTokenSource cancellationTokenSource;
@@ -80,7 +80,7 @@ class BaseClass
                 {
                     await AttackController(Characters);
                 }
-                if (nowEnergy >= amountOfEnergyConsumed)
+                if (nowMana >= amountOfManaConsumed)
                 {
                     if (isEleminated == false)
                     {
@@ -159,7 +159,7 @@ class BaseClass
     {
         Tools.PrintColor(Name + "superrr", "\u001b[32m");
         Character[0].SendDamage(AttackDamage);
-        nowEnergy -= amountOfEnergyConsumed;
+        nowMana -= amountOfManaConsumed;
 
     }
 

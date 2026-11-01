@@ -9,10 +9,10 @@ class Warrior : Heroes
         superAttackCheck = true;
         superAttackDamage = 250;
         superAttackSpeed = 5000;
-        amountOfEnergyConsumed = 50;
+        amountOfManaConsumed = 50;
 
-        maxEnergy = 100;
-        nowEnergy = maxEnergy;
+        maxMana = 100;
+        nowMana = maxMana;
 
         attackCount = 5;
         AttackDamage = 100;

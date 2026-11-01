@@ -9,10 +9,10 @@ class Boss : Enemies
         superAttackCheck = true;
         superAttackDamage = 300;
         superAttackSpeed = 6000;
-        amountOfEnergyConsumed = 50;
+        amountOfManaConsumed = 50;
 
-        maxEnergy = 150;
-        nowEnergy = maxEnergy;
+        maxMana = 150;
+        nowMana = maxMana;
 
         attackCount = 6;
         AttackDamage = 150;

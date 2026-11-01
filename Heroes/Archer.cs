@@ -9,10 +9,10 @@ class Archer : Heroes
         superAttackCheck = true;
         superAttackDamage = 50;
         superAttackSpeed = 5000;
-        amountOfEnergyConsumed = 20;
+        amountOfManaConsumed = 20;
 
-        maxEnergy = 100;
-        nowEnergy = maxEnergy;
+        maxMana = 100;
+        nowMana = maxMana;
 
         attackCount = 4;
         AttackDamage = 50;
@@ -26,6 +26,6 @@ class Archer : Heroes
             c.SendDamage(AttackDamage);
         }
 
-        nowEnergy -= amountOfEnergyConsumed;
+        nowMana -= amountOfManaConsumed;
     }
 }
