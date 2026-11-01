@@ -1,52 +1,35 @@
 using System.ComponentModel.Design;
 
-class Heroes : BaseClass
+partial class Heroes : BaseClass
 {
-    private bool usePotion;
-    private const float percentageOfPowerIncrease = 50;
-    protected bool HealthPotion()
+
+    protected override void ReceiveDamage()
     {
-        if (Tools.PotionNumber[(byte)Tools.Potions.Health] > 0 && !usePotion)
+        if (isEleminated == false && NowHeath != MaxHeath)
         {
-            Tools.UsePotion(Tools.Potions.Health);
-            NowHeath = MaxHeath;
-            return true;
+            if (Potions.HealthPotion(Name))
+            {
+                NowHeath = MaxHeath;
+            }
+            else
+            {
+                isEleminated = true;
+                cancellationTokenSource.Cancel();
+                NowHeath = 0;
+                Tools.EndGameController_Heroes();
+            }
         }
-        else return false;
     }
-    protected bool ManaPotion()
+    protected override bool IsExistEnoughMana()
     {
-        if (Tools.PotionNumber[(byte)Tools.Potions.Mana] > 0 && !usePotion)
+        if (nowMana >= amountOfManaConsumed)
+            return true;
+        else if (Potions.ManaPotion(Name))
         {
-            Tools.UsePotion(Tools.Potions.Mana);
             nowMana = maxMana;
             return true;
         }
         else return false;
     }
-    protected bool WeaponPotion()
-    {
-        if (Tools.PotionNumber[(byte)Tools.Potions.Health] > 0 && !usePotion)
-        {
-            Tools.UsePotion(Tools.Potions.Health);
-            AttackDamage += AttackDamage * (percentageOfPowerIncrease / 100);
-            return true;
-        }
-        else return false;
-    }
 
-    protected override void ReceiveDamage()
-    {
-        if (HealthPotion())
-        {
-            Tools.PrintColor("Heals " + Name, "\u001b[33m");
-        }
-        else
-        {
-            isEleminated = true;
-            cancellationTokenSource.Cancel();
-            NowHeath = 0;
-            Tools.EndGameController();
-        }
-    }
 }

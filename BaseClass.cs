@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices.Marshalling;
 
-class BaseClass
+abstract class BaseClass
 {
     private protected int maxMana;
     private protected int nowMana;
@@ -80,7 +80,7 @@ class BaseClass
                 {
                     await AttackController(Characters);
                 }
-                if (nowMana >= amountOfManaConsumed)
+                if (IsExistEnoughMana())
                 {
                     if (isEleminated == false)
                     {
@@ -119,6 +119,11 @@ class BaseClass
         }
 
     }
+
+    protected virtual bool IsExistEnoughMana() => (nowMana >= amountOfManaConsumed);
+
+
+
     private async Task AttackController(List<BaseClass> Characters)
     {
         if (isEleminated == false)
@@ -158,7 +163,7 @@ class BaseClass
     private protected virtual void SuperAttack(List<BaseClass> Character)
     {
         Tools.PrintColor(Name + "superrr", "\u001b[32m");
-        Character[0].SendDamage(AttackDamage);
+        Character[0].SendDamage(superAttackDamage);
         nowMana -= amountOfManaConsumed;
 
     }
@@ -175,12 +180,6 @@ class BaseClass
         }
         Tools.PrintColor(Name + NowHeath, "\u001b[31m");
     }
-    protected virtual void ReceiveDamage()
-    {
-        isEleminated = true;
-        cancellationTokenSource.Cancel();
-        NowHeath = 0;
-        Tools.EndGameController();
-    }
+    protected abstract void ReceiveDamage();
 
 }
