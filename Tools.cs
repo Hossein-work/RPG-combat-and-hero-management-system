@@ -6,14 +6,14 @@ static class Tools
         {0,new List<BaseClass>()  },
         {1,new List<BaseClass>()  },
     };
-    internal static List<BaseClass> GetList(byte key) => number[key]; 
+    internal static List<BaseClass> GetList(byte key) => number[key];
     internal static void AddToList(int key, BaseClass value)
     {
         number[key].Add(value);
     }
     private static List<int> potionNumber = new List<int>()
     {
-        1,1,1
+        10,1,1
     };
     public static IReadOnlyList<int> PotionNumber => potionNumber.AsReadOnly();
     internal static void UsePotion(Potions type) => potionNumber[(byte)type] -= 1;
@@ -23,36 +23,35 @@ static class Tools
         Mana,
         Weapon
     }
-    internal static void EndGameController()
+    internal static void EndGameController_Enemies()
     {
-        Enemys();
-        Heroes();
-        void EndGame()
+
+        foreach (var item in number[1])
         {
-            foreach (var item in number[0])
-                item.cancellationTokenSource.Cancel();
-            foreach (var item in number[1])
-                item.cancellationTokenSource.Cancel();
-            IsEndGame = true;
+            if (item.NowHeath != 0)
+                return;
         }
-        void Enemys()
+        EndGame();
+
+    }
+    internal static void EndGameController_Heroes()
+    {
+
+        foreach (var item in number[0])
         {
-            foreach (var item in number[1])
-            {
-                if (item.NowHeath != 0)
-                    return;
-            }
-            EndGame();
+            if (item.NowHeath != 0)
+                return;
         }
-        void Heroes()
-        {
-            foreach (var item in number[0])
-            {
-                if (item.NowHeath != 0)
-                    return;
-            }
-            EndGame();
-        }
+        EndGame();
+
+    }
+    private static void EndGame()
+    {
+        foreach (var item in number[0])
+            item.cancellationTokenSource.Cancel();
+        foreach (var item in number[1])
+            item.cancellationTokenSource.Cancel();
+        IsEndGame = true;
     }
     internal static void PrintColor(string text, string color)
     {
